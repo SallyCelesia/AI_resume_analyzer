@@ -1,0 +1,27 @@
+const API_URL = import.meta.env.VITE_API_URL ?? "/api";
+
+export async function createComparison(resume, jobDescription) {
+  const formData = new FormData();
+  formData.append("resume", resume);
+  formData.append("jobDescription", jobDescription);
+
+  let response;
+  try {
+    response = await fetch(`${API_URL}/comparisons`, {
+      method: "POST",
+      body: formData,
+    });
+  } catch {
+    throw new Error("Could not reach the backend. Check that the server is running.");
+  }
+
+  const body = await response.json().catch(() => null);
+  if (!response.ok) {
+    throw new Error(body?.message ?? "The comparison could not be submitted.");
+  }
+  if (!body?.comparison) {
+    throw new Error("The backend returned an invalid comparison response.");
+  }
+
+  return body;
+}
