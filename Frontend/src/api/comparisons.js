@@ -1,3 +1,7 @@
+// Public path prefix the backend is mounted under. The Vercel project rewrites
+// /api/* to the backend service, and the Vite dev server proxies it to
+// localhost:5000, so this holds in both places. VITE_API_URL stays as an escape
+// hatch for pointing at a backend on a different origin.
 const API_URL = import.meta.env.VITE_API_URL ?? "/api";
 
 export async function createComparison(resume, jobDescription) {
