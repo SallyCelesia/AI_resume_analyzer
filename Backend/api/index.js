@@ -2,7 +2,7 @@
 //
 // server.js calls app.listen(), which Vercel functions cannot do - the platform
 // invokes a handler per request instead of giving it a port to hold open. This
-// file exports the same Express app, with no listener, so @vercel/node can
+// file exports the same Express app, with no listener, so the platform can
 // drive it. Local development still uses `node server.js` unchanged.
 
 let app;
@@ -11,9 +11,9 @@ let startupError;
 
 // This block runs once per cold start, before any request is handled. If
 // anything in the require chain throws - a dependency that cannot load, a bad
-// environment - Node fails the invocation before Express exists, and the
-// browser gets a plain 500 with no JSON body, which is a status and nothing
-// else. Loading the app in here, inside try/catch, turns that into a message.
+// environment - the invocation fails before Express exists, and the browser
+// gets a plain 500 with no body. Loading the app in here, inside try/catch,
+// turns that into a message.
 try {
   app = require("../app");
   connectDatabase = require("../config/database");
@@ -38,9 +38,26 @@ function connection() {
   return connectionPromise;
 }
 
+// The platform hands this handler a plain Node response, which has no
+// Express-only helpers like status() or json(). Writing the status and body
+// with setHeader/end works for a plain response and for Express alike, so an
+// error on the way out cannot itself throw.
+function sendJson(res, status, payload) {
+  const body = JSON.stringify(payload);
+  if (typeof res.status === "function") {
+    res.status(status).json(payload);
+    return;
+  }
+  res.statusCode = status;
+  if (typeof res.setHeader === "function") {
+    res.setHeader("Content-Type", "application/json");
+  }
+  res.end(body);
+}
+
 module.exports = async (req, res) => {
   if (startupError) {
-    res.status(500).json({
+    sendJson(res, 500, {
       message: `The server failed to start: ${startupError.message}`,
     });
     return;
@@ -53,7 +70,7 @@ module.exports = async (req, res) => {
     // the project's environment variables. If it is missing there, connecting
     // fails before Express sees the request.
     console.error("Database connection failed:", error.message);
-    res.status(503).json({
+    sendJson(res, 503, {
       message:
         "The server could not connect to the database. Check that MONGODB_URI is set in the deployment environment.",
     });
