@@ -2,6 +2,9 @@
   "name": "zero2shipped-backend",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "22.x"
+  },
   "description": "Express and MongoDB API for resume/job description submissions",
   "main": "server.js",
   "scripts": {
