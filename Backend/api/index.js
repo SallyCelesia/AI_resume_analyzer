@@ -24,7 +24,21 @@ function connection() {
 }
 
 module.exports = async (req, res) => {
-  await connection();
+  try {
+    await connection();
+  } catch (error) {
+    // dotenv is only loaded by server.js, so on Vercel MONGODB_URI comes from
+    // the project's environment variables. If it is missing there, connecting
+    // fails before Express sees the request, which would surface to the browser
+    // as an invocation error with no body to read. Answer in JSON instead, so
+    // the client can show the real reason.
+    console.error("Database connection failed:", error.message);
+    res.status(503).json({
+      message:
+        "The server could not connect to the database. Check that MONGODB_URI is set in the deployment environment.",
+    });
+    return;
+  }
   return app(req, res);
 };
 
