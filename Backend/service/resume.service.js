@@ -1,5 +1,9 @@
-const { PDFParse } = require("pdf-parse");
+const { DOMMatrix } = require("@napi-rs/canvas");
 const { AppError } = require("../utils");
+
+globalThis.DOMMatrix ??= DOMMatrix;
+
+const { PDFParse } = require("pdf-parse");
 
 // PDFs are stored as a Buffer in memory (multer.memoryStorage), so pdf-parse v2
 // is handed the bytes directly with `data`. In v1 this was `pdf(buffer)`; v2 is
