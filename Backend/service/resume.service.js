@@ -1,15 +1,15 @@
-const { DOMMatrix } = require("@napi-rs/canvas");
+const { CanvasFactory, getData } = require("pdf-parse/worker");
 const { AppError } = require("../utils");
 
-globalThis.DOMMatrix ??= DOMMatrix;
-
 const { PDFParse } = require("pdf-parse");
+
+PDFParse.setWorker(getData());
 
 // PDFs are stored as a Buffer in memory (multer.memoryStorage), so pdf-parse v2
 // is handed the bytes directly with `data`. In v1 this was `pdf(buffer)`; v2 is
 // a class you construct, call, and then destroy to release the worker.
 async function extractResumeText(buffer) {
-  const parser = new PDFParse({ data: buffer });
+  const parser = new PDFParse({ data: buffer, CanvasFactory });
 
   try {
     const result = await parser.getText();
@@ -31,6 +31,7 @@ async function extractResumeText(buffer) {
     if (error instanceof AppError) {
       throw error;
     }
+    console.error("Resume PDF parsing failed:", error);
     throw new AppError("This PDF could not be read. Try re-exporting it.", 400);
   } finally {
     // destroy() releases pdf.js resources; a failure here must not mask the
