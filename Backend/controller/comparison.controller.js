@@ -8,7 +8,7 @@ exports.createComparison = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json({
-    message: "Resume and job description saved; AI comparison is not active yet.",
+    message: "Resume analysed against the job description.",
     comparison: {
       id: comparison.id,
       status: comparison.status,
@@ -18,6 +18,13 @@ exports.createComparison = asyncHandler(async (req, res) => {
       },
       jobDescriptionLength: comparison.jobDescription.length,
       createdAt: comparison.createdAt,
+      analysis: {
+        score: comparison.analysis?.score ?? null,
+        summary: comparison.analysis?.summary ?? "",
+        skillsPresent: comparison.analysis?.skillsPresent ?? [],
+        skillsMissing: comparison.analysis?.skillsMissing ?? [],
+        fixes: comparison.analysis?.fixes ?? [],
+      },
     },
   });
 });

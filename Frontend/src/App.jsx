@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { createComparison } from "./api/comparisons.js";
+import Analysis from "./components/Analysis.jsx";
 
 function App() {
   const fileInputRef = useRef(null);
@@ -69,6 +70,10 @@ function App() {
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
+  // The backend only responds 201 once the analysis exists, so a successful
+  // submission always arrives with one. Failures surface through `error`.
+  const analysis = comparison?.analysis;
+
   return (
     <>
       <div className="blob blob-1" aria-hidden="true" />
@@ -88,8 +93,9 @@ function App() {
             Compare your resume to a <em>job description</em>
           </h1>
           <p>
-            Upload a resume PDF and add the job description. AI-powered scoring
-            and skill matching will be added later.
+            Upload a resume PDF and add the job description. It is scored out of
+            100, with the skills present and missing, and the top 3 fixes worth
+            making first.
           </p>
         </section>
 
@@ -180,7 +186,7 @@ function App() {
             {isSubmitting ? (
               <>
                 <span className="spinner" aria-hidden="true" />
-                Submitting…
+                Analysing…
               </>
             ) : (
               "Submit for comparison"
@@ -188,23 +194,15 @@ function App() {
           </button>
         </form>
 
-        {comparison && (
-          <section className="results" aria-label="Comparison submission">
-            <div className="score-card glass submission-card" role="status">
-              <h2>Resume received</h2>
-              <p className="verdict">
-                Your resume and job description are saved and ready for the
-                upcoming AI comparison.
-              </p>
+        {analysis && (
+          <section className="results" aria-label="Comparison result">
+            <div className="score-card glass">
+              <h2>Your match score</h2>
+              <Analysis analysis={analysis} />
+              {analysis.summary && <p className="verdict">{analysis.summary}</p>}
               <p className="file-note">
                 {comparison.resume.fileName} ·{" "}
                 {(comparison.resume.size / 1024).toFixed(0)} KB
-              </p>
-              <p className="file-note">
-                Status: <strong>{comparison.status}</strong>
-              </p>
-              <p className="comparison-id">
-                Comparison ID: <code>{comparison.id}</code>
               </p>
               <button className="btn" type="button" onClick={reset}>
                 Start another comparison
@@ -214,7 +212,7 @@ function App() {
         )}
       </main>
 
-      <footer>Built in the Build-using-AI workshop · AI comparison coming soon</footer>
+      <footer>AI_Resume_Analyzer workshop · scored by labd</footer>
     </>
   );
 }

@@ -21,12 +21,18 @@ function errorHandler(error, req, res, next) {
   }
 
   const statusCode = error.statusCode || 500;
+  // AppError messages are written for the client - "the AI allowance is used up"
+  // is the whole point of that response - so they are passed through even on a
+  // 5xx. Only errors we did not author get the generic message.
+  const isAppError = error instanceof AppError;
   if (statusCode >= 500) {
     console.error(error);
   }
   res.status(statusCode).json({
     message:
-      statusCode >= 500 ? "An unexpected server error occurred." : error.message,
+      statusCode >= 500 && !isAppError
+        ? "An unexpected server error occurred."
+        : error.message,
   });
 }
 

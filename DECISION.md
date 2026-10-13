@@ -1,16 +1,28 @@
 I want to build an HTML, CSS, JS landing page for my resume parser, where I should be able to upload an PDF and get the score out of it. Here I just want to see the score, what skills are present, and what skills are missing. And I'm gonna call this as 0 to shipped resume parser. This is gonna be a mock design, so just build html css is fine, no back-end server is needed
+*/---------------------------------------------------------------------------------------/*
 
 Convert this entire project into a react project in frontend folder
 
-build backend folder contains express server to handle requests, lets connect to MongoDB. 
+*/---------------------------------------------------------------------------------------/*
 
-The application should take resume PDF and a JD for comparison, AI part will be added later. 
+Build backend folder contains express server to handle requests, lets connect to MongoDB. 
+The application should take resume PDF and a JD for comparison, AI part will be added later.
 
-Backend folder should container server.js, routes folder, controller folder, service folder, config folder, middleware folder and utils.js. Remove if unwanted files present in frontend folder after doing this part.
+Backend folder should container server.js, routes folder, controller folder, service folder, config folder, middleware folder and utils.js.
+
+Remove if unwanted files present in frontend folder after doing this part.
+
+*/---------------------------------------------------------------------------------------/*
 
 add vercel.json folder to both Frontend and Backend folder, I am gonna create two projects in vercel for deployment
 
-below is the format to connect to labd AI, lets connect and parse the resume and give the score and top 3 fixes in the uploaded resume.
+*/---------------------------------------------------------------------------------------/*
+
+**labd connection prompt**
+
+Below is the format to connect to labd AI, lets connect and parse the resume and give the score and top 3 fixes in the uploaded resume.
+
+#quick start: call labd from a program
 
 Send the conversation so far as messages, each a role (user or assistant) and its content, ending on the user's turn. labd answers once, in JSON: message.content is the reply and credits.percentLeft is what is left of your allowance. Nothing is remembered between requests, so send the earlier turns yourself when you want a conversation.
 
@@ -33,3 +45,7 @@ console.log(message.content, `${credits.percentLeft}% left`);
 Keep the key on a server. labd does not answer browsers on other sites, so a key in a web page is a key anyone viewing it can copy and nothing you can use.
 401 the key is wrong or revoked · 402 the allowance is used up · 403 the API is switched off · 429 too many requests this minute, wait and retry.
 Every answer spends the same allowance as labd in the portal, your editor and your terminal.
+
+*/---------------------------------------------------------------------------------------/*
+
+**last prompt given**: Copy and paste the prompt given by vercel to configure this repository to deploy on Vercel as a project with multiple services.
