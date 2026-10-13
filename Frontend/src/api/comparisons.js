@@ -21,7 +21,12 @@ export async function createComparison(resume, jobDescription) {
 
   const body = await response.json().catch(() => null);
   if (!response.ok) {
-    throw new Error(body?.message ?? "The comparison could not be submitted.");
+    // A missing message is itself the signal: a crashed function or a routing
+    // miss answers with a non-JSON page, so the status is the only clue left.
+    throw new Error(
+      body?.message ??
+        `The comparison could not be submitted (HTTP ${response.status}).`,
+    );
   }
   if (!body?.comparison) {
     throw new Error("The backend returned an invalid comparison response.");
