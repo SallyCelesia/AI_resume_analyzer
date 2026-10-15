@@ -82,9 +82,9 @@ function App() {
 
       <header className="nav glass">
         <span className="logo">
-          Zero<span>2</span>Shipped
+          ResuMetrics
         </span>
-        <span className="tag">AI Resume Parser</span>
+        <span className="tag">AI Resume Analyser</span>
       </header>
 
       <main>
@@ -93,9 +93,8 @@ function App() {
             Compare your resume to a <em>job description</em>
           </h1>
           <p>
-            Upload a resume PDF and add the job description. It is scored out of
-            100, with the skills present and missing, and the top 3 fixes worth
-            making first.
+            Upload a resume PDF --&gt; Add the job description --&gt; After analysing, the score will be shown out of
+            100, with the skills present and missing, and also the top 3 fixes to correct in your uploaded resume will be displayed.
           </p>
         </section>
 
@@ -212,7 +211,7 @@ function App() {
         )}
       </main>
 
-      <footer>AI_Resume_Analyzer workshop · scored by labd</footer>
+      <footer>ResuMetrics · AI_Resume_Analyzer · Match Your Resumes to Job Roles · Spot the Skill Gap</footer>
     </>
   );
 }

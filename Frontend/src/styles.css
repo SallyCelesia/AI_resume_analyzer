@@ -129,9 +129,10 @@ main {
 }
 
 .hero p {
-  margin-top: 12px;
-  color: var(--text-dim);
+  margin-top: 15px;
+  color: #c4e1e6;
   font-size: 1.05rem;
+  line-height: 1.5;
 }
 
 .upload-card {
