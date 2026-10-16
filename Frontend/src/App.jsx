@@ -198,7 +198,6 @@ function App() {
             <div className="score-card glass">
               <h2>Your match score</h2>
               <Analysis analysis={analysis} />
-              <h2 style="margin-top:20px; margin-bottom:20px">Overall Description</h2>
               {analysis.summary && <p className="verdict">{analysis.summary}</p>}
               <p className="file-note">
                 {comparison.resume.fileName} ·{" "}
